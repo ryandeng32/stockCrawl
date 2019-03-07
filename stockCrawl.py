@@ -46,25 +46,12 @@ chosenStock = data[choice - 1]['secuName']
 
 for i in data:
     if i['secuName'] == chosenStock:
-        title = i["title"]
-        page_num = i['page_num']
+        page_url = i["infoCode"]
+        date = i["datetime"][0:10].replace("-", "")
 
 
 # use selenium to open up stock report in chrome browser
 driver = webdriver.Chrome()
-
-driver.get("https://www.google.com/search?client=firefox-b-d&q=%E4%B8%9C%E6%96%B9%E8%B4%A2%E5%AF%8C%E7%A0%94%E7%A9%B6%E6%8A%A5%E5%91%8A")
-driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Web results'])[1]/following::h3[1]").click()
-driver.find_element_by_id("gopage").click()
-driver.find_element_by_id("gopage").clear()
-driver.find_element_by_id("gopage").send_keys(str(page_num))
-driver.find_element_by_link_text("Go").click()
-
-# sleep for 3 second for the webpage to load, and get the url
-time.sleep(3)
-url = driver.current_url
-
-# open up stock report
-driver.get(url)
-driver.find_element_by_link_text(title).click()
+driver.get("http://data.eastmoney.com/report/" + date + "/" + page_url + ".html")
+time.sleep(10)
 driver.close()
